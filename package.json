@@ -1,6 +1,6 @@
 {
     "name": "@unified-api/vuejs-authentication",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Unified.to VueJS authentication component",
     "keywords": [
         "unifiedapi",
@@ -46,8 +46,5 @@
         "vite": "^5.0.12",
         "vite-plugin-dts": "^4.5.4",
         "vue-tsc": "^3.0.5"
-    },
-    "dependencies": {
-        "vue-router": "^4.5.1"
     }
 }

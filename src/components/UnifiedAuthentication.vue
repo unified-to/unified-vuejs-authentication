@@ -3,8 +3,8 @@
         <h3 v-if="title" class="text-xl font-bold mb-4">{{ title }}</h3>
         <p v-if="description" class="text-md mb-4">{{ description }}</p>
 
-        <div v-if="error" class="justify-center items-center w-full py-8 font-semibold text-red-500 leading-5 tracking-tight inline-flex">
-            {{ error }}
+        <div v-if="_error" class="justify-center items-center w-full py-8 font-semibold text-red-500 leading-5 tracking-tight inline-flex">
+            {{ _error }}
         </div>
 
         <div v-else class="flex flex-col gap-2">
@@ -27,7 +27,6 @@
 
 <script lang="ts">
 import { type IIntegration } from '../models/Unified';
-import { useRoute } from 'vue-router';
 
 export default {
     name: 'UnifiedAuthentication',
@@ -46,13 +45,7 @@ export default {
         pretext: String, // pre-text for login buttons (eg. to "Sign with " or "Continue with " )
         include_text: Boolean, // defaults to true
         include_icon: Boolean, // defaults to true
-    },
-    setup() {
-        const route = useRoute();
-        const error = (route.query?.error as string) || '';
-        return {
-            error: error.replace('_', ' '),
-        };
+        error: String,
     },
     watch: {
         include_text(value) {
@@ -77,6 +70,7 @@ export default {
             authintegrations: undefined as IIntegration[] | undefined,
             _include_text: this.include_text !== false ? this.include_text : true,
             _include_icon: this.include_icon !== false ? this.include_icon : true,
+            _error: this.error?.replace('_', ' '),
         };
     },
     methods: {

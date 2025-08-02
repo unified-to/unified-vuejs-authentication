@@ -19,13 +19,13 @@ state: StringConstructor;
 pretext: StringConstructor;
 include_text: BooleanConstructor;
 include_icon: BooleanConstructor;
-}>, {
-error: string;
-}, {
+error: StringConstructor;
+}>, {}, {
 api_url: string;
 authintegrations: IIntegration[] | undefined;
 _include_text: true;
 _include_icon: true;
+_error: string | undefined;
 }, {}, {
 href(auth: Pick<IIntegration, "type">): string;
 }, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
@@ -43,6 +43,7 @@ state: StringConstructor;
 pretext: StringConstructor;
 include_text: BooleanConstructor;
 include_icon: BooleanConstructor;
+error: StringConstructor;
 }>> & Readonly<{}>, {
 include_text: boolean;
 include_icon: boolean;
