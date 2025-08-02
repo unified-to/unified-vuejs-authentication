@@ -1,35 +1,31 @@
 <template>
-    <div class="flex flex-wrap">
-        <div class="w-2/3">config...</div>
-        <div v-if="authintegrations !== undefined" class="w-1/3">
-            <h3 v-if="title" class="text-xl font-bold mb-4">{{ title }}</h3>
-            <p v-if="description" class="text-md">{{ description }}</p>
+    <div class="w-full">
+        <h3 v-if="title" class="text-xl font-bold mb-4">{{ title }}</h3>
+        <p v-if="description" class="text-md mb-4">{{ description }}</p>
 
-            <div v-if="error" class="justify-center items-center w-full py-8 font-semibold text-red-500 leading-5 tracking-tight inline-flex">
-                {{ error }}
-            </div>
+        <div v-if="error" class="justify-center items-center w-full py-8 font-semibold text-red-500 leading-5 tracking-tight inline-flex">
+            {{ error }}
+        </div>
 
-            <div v-else class="flex flex-col gap-2">
-                <a
-                    class="px-4 py-3 flex-nowrap font-medium select-none rounded justify-center items-center w-full inline-flex border hover:bg-blue-500 hover:text-black"
-                    v-for="auth of authintegrations"
-                    :href="href(auth)"
-                    :title="pretext ? `${pretext} ${auth.name}` : auth.name"
-                >
-                    <img v-if="include_icon" :src="auth.logo_url" class="w-5 h-5 mr-2" />
+        <div v-else class="flex flex-col gap-2">
+            <a
+                class="px-4 py-3 flex-nowrap font-medium select-none rounded justify-center items-center w-full inline-flex border hover:bg-blue-500 hover:text-black"
+                v-for="auth of authintegrations"
+                :href="href(auth)"
+                :title="pretext ? `${pretext} ${auth.name}` : auth.name"
+            >
+                <img v-if="_include_icon" :src="auth.logo_url" class="w-5 h-5 mr-2" />
 
-                    <div v-if="include_text" class="">
-                        {{ pretext }}
-                        {{ auth.name }}
-                    </div>
-                </a>
-            </div>
+                <div v-if="_include_text" class="">
+                    {{ pretext }}
+                    {{ auth.name }}
+                </div>
+            </a>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { type PropType } from 'vue';
 import { type IIntegration } from '../models/Unified';
 import { useRoute } from 'vue-router';
 
@@ -40,17 +36,16 @@ export default {
             type: String,
             required: true,
         },
-        dc: String as PropType<'us' | 'eu' | 'au' | '' | undefined>, // defaults to us
+        dc: String, // 'us' | 'eu' | 'au', defaults to us
         environment: String,
         title: String,
         description: String,
-        sUrl: String, // success redirect URL, defaults to location.href
-        fUrl: String, // failure redirect URL, defaults to location.href
-        scopes: Array as PropType<string[]>, // additinonal integration-specific permissions scopes
+        success_url: String, // success redirect URL, defaults to location.href
+        failure_url: String, // failure redirect URL, defaults to location.href
         state: String, // returned back to the sUrl and fURL
         pretext: String, // pre-text for login buttons (eg. to "Sign with " or "Continue with " )
-        includeText: Boolean, // defaults to true
-        includeIcon: Boolean, // defaults to true
+        include_text: Boolean, // defaults to true
+        include_icon: Boolean, // defaults to true
     },
     setup() {
         const route = useRoute();
@@ -59,28 +54,42 @@ export default {
             error: error.replace('_', ' '),
         };
     },
+    watch: {
+        include_text(value) {
+            this._include_text = value !== undefined ? value : true;
+        },
+        include_icon(value) {
+            this._include_icon = value !== undefined ? value : true;
+        },
+    },
     data() {
         const dc = (this.dc || 'us').toLowerCase();
-        const api_url = dc === 'au' ? 'https://api-au.unified.to' : dc === 'eu' ? 'https://api-eu.unified.to' : 'https://api.unified.to';
+        const api_url = location.href.includes('localhost:')
+            ? 'http://localhost:8000'
+            : dc === 'au'
+            ? 'https://api-au.unified.to'
+            : dc === 'eu'
+            ? 'https://api-eu.unified.to'
+            : 'https://api.unified.to';
 
         return {
             api_url,
             authintegrations: undefined as IIntegration[] | undefined,
-            include_text: this.includeText !== false ? this.includeText : true,
-            include_icon: this.includeIcon !== false ? this.includeIcon : true,
+            _include_text: this.include_text !== false ? this.include_text : true,
+            _include_icon: this.include_icon !== false ? this.include_icon : true,
         };
     },
     methods: {
         href(auth: Pick<IIntegration, 'type'>) {
             const params = new URLSearchParams();
             params.append('redirect', 'true');
-            if (this.sUrl) {
-                params.append('success_redirect', this.sUrl);
+            if (this.success_url) {
+                params.append('success_redirect', this.success_url);
             } else {
                 params.append('success_redirect', location.href.split('?')[0]);
             }
-            if (this.fUrl) {
-                params.append('failure_redirect', this.fUrl);
+            if (this.failure_url) {
+                params.append('failure_redirect', this.failure_url);
             } else {
                 params.append('failure_redirect', location.href.split('?')[0]);
             }
