@@ -62,13 +62,10 @@ The following are the `props` that can be passed to the component:
 
     // success redirect URL, defaults to location.href
     // a `jwt` parameter will be sent to this URL that will contain { name, emails } which will be base64-encoded and signed by your workspace secret
-    sUrl: String,
+    success_url: String,
 
     // failure redirect URL, defaults to location.href
-    fUrl: String,
-
-    // additinonal integration-specific permissions scopes
-    scopes: Array as PropType<string[]>,
+    failure_url: String,
 
     // returned back to the sUrl and fURL
     state: String,
@@ -77,8 +74,8 @@ The following are the `props` that can be passed to the component:
     pretext: String,
 
     // defaults to true
-    includeText: Boolean,
+    include_text: Boolean,
     // defaults to true
-    includeIcon: Boolean,
+    include_icon: Boolean,
 }
 ```

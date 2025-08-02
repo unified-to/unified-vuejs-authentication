@@ -25,7 +25,7 @@ export default defineConfig({
     build: {
         lib: {
             entry: resolve(__dirname, 'src/main.ts'),
-            name: 'Unifiedauthentication',
+            name: 'UnifiedAuthentication',
             // the proper extensions will be added
             fileName: 'UnifiedAPI-VueJS-Authentication',
         },
