@@ -1,18 +1,17 @@
 <template>
-    <div class="w-full ml:w-1/3 md:w-1/2 flex place-content-center min-h-screen items-center justify-center px-8 md:px-8">
-        <div v-if="!authintegrations?.length" class="">⟳</div>
-
-        <div v-else class="lg:w-2/3 sm:w-2/3 md:w-full w-full">
-            <h3 v-if="title" class="text-xl font-bold">{{ title }}</h3>
+    <div class="flex flex-wrap">
+        <div class="w-2/3">config...</div>
+        <div v-if="authintegrations !== undefined" class="w-1/3">
+            <h3 v-if="title" class="text-xl font-bold mb-4">{{ title }}</h3>
             <p v-if="description" class="text-md">{{ description }}</p>
 
             <div v-if="error" class="justify-center items-center w-full py-8 font-semibold text-red-500 leading-5 tracking-tight inline-flex">
                 {{ error }}
             </div>
 
-            <div v-else class="">
+            <div v-else class="flex flex-col gap-2">
                 <a
-                    class="my-1 flex-nowrap font-medium select-none rounded-lg justify-center items-center w-full inline-flex mb-2 mr-2 border bg-blue-500 text-white hover:bg-blue-700 text-white border-gray-500 hover:border-white"
+                    class="px-4 py-3 flex-nowrap font-medium select-none rounded justify-center items-center w-full inline-flex border hover:bg-blue-500 hover:text-black"
                     v-for="auth of authintegrations"
                     :href="href(auth)"
                     :title="pretext ? `${pretext} ${auth.name}` : auth.name"
@@ -32,6 +31,7 @@
 <script lang="ts">
 import { type PropType } from 'vue';
 import { type IIntegration } from '../models/Unified';
+import { useRoute } from 'vue-router';
 
 export default {
     name: 'UnifiedAuthentication',
@@ -52,17 +52,22 @@ export default {
         includeText: Boolean, // defaults to true
         includeIcon: Boolean, // defaults to true
     },
+    setup() {
+        const route = useRoute();
+        const error = (route.query?.error as string) || '';
+        return {
+            error: error.replace('_', ' '),
+        };
+    },
     data() {
-        const api_url = this.dc === 'au' ? 'https://api-au.unified.to' : this.dc === 'eu' ? 'https://api-eu.unified.to' : 'https://api.unified.to';
-
-        const error = (useRoute().query?.error as string) || '';
+        const dc = (this.dc || 'us').toLowerCase();
+        const api_url = dc === 'au' ? 'https://api-au.unified.to' : dc === 'eu' ? 'https://api-eu.unified.to' : 'https://api.unified.to';
 
         return {
             api_url,
-            authintegrations: [] as IIntegration[],
-            include_text: this.includeText !== false,
-            include_icon: this.includeIcon !== false,
-            error: error.replace('_', ' '),
+            authintegrations: undefined as IIntegration[] | undefined,
+            include_text: this.includeText !== false ? this.includeText : true,
+            include_icon: this.includeIcon !== false ? this.includeIcon : true,
         };
     },
     methods: {
@@ -86,16 +91,18 @@ export default {
                 params.append('env', this.environment);
             }
 
-            return `${this.api_url}unified/integration/login/${this.workspace_id}/${auth.type}?${params.toString()}`;
+            return `${this.api_url}/unified/integration/login/${this.workspace_id}/${auth.type}?${params.toString()}`;
         },
     },
     async mounted() {
         this.authintegrations =
             (await (
                 await fetch(
-                    `${this.api_url}/unified/integration/workspace/${this.workspace_id}?categories=auth&active=true&summary=true&env=${this.environment}`
+                    `${this.api_url}/unified/integration/workspace/${this.workspace_id}?categories=auth&active=true&summary=true&env=${this.environment || ''}`
                 )
             ).json()) || [];
+
+        console.log(this.authintegrations);
     },
 };
 </script>
