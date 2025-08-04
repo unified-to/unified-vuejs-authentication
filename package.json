@@ -1,6 +1,6 @@
 {
     "name": "@unified-api/vuejs-authentication",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Unified.to VueJS authentication component",
     "keywords": [
         "unifiedapi",
@@ -12,6 +12,14 @@
     "files": [
         "dist"
     ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/unified-to/unified-vuejs-authentication.git"
+    },
+    "bugs": {
+        "url": "https://github.com/unified-to/unified-vuejs-authentication/issues"
+    },
+    "homepage": "https://github.com/unified-to/unified-vuejs-authentication#readme",
     "main": "./dist/UnifiedAPI-VueJS-Authentication.umd.cjs",
     "module": "./dist/UnifiedAPI-VueJS-Authentication.js",
     "types": "./dist/index.d.ts",
