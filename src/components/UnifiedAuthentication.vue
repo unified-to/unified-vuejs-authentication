@@ -1,20 +1,15 @@
 <template>
     <div class="w-full">
-        <h3 v-if="title" class="text-xl font-bold mb-4">{{ title }}</h3>
-        <p v-if="description" class="text-md mb-4">{{ description }}</p>
+        <h3 v-if="title" :class="TITLE_CLASSES">{{ title }}</h3>
+        <p v-if="description" :class="DESCRIPTION_CLASSES">{{ description }}</p>
 
-        <div v-if="_error" class="justify-center items-center w-full py-8 font-semibold text-red-500 leading-5 tracking-tight inline-flex">
+        <div v-if="_error" :class="ERROR_CLASSES">
             {{ _error }}
         </div>
 
-        <div v-else class="flex flex-col gap-2">
-            <a
-                class="px-4 py-3 flex-nowrap font-medium select-none rounded justify-center items-center w-full inline-flex border hover:bg-blue-500 hover:text-black"
-                v-for="auth of authintegrations"
-                :href="href(auth)"
-                :title="pretext ? `${pretext} ${auth.name}` : auth.name"
-            >
-                <img v-if="_include_icon" :src="auth.logo_url" class="w-5 h-5 mr-2" />
+        <div v-else :class="BUTTON_CONTAINER_CLASSES">
+            <a :class="BUTTON_CLASSES" v-for="auth of authintegrations" :href="href(auth)" :title="pretext ? `${pretext} ${auth.name}` : auth.name">
+                <img v-if="_include_icon" :src="auth.logo_url" :class="BUTTON_CLASSES_ICON" />
 
                 <div v-if="_include_text" class="">
                     {{ pretext }}
@@ -46,6 +41,17 @@ export default {
         include_text: Boolean, // defaults to true
         include_icon: Boolean, // defaults to true
         error: String,
+    },
+    setup() {
+        return {
+            BUTTON_CONTAINER_CLASSES: 'flex flex-col gap-2',
+            BUTTON_CLASSES_ICON: 'w-5 h-5 mr-2',
+            BUTTON_CLASSES:
+                'px-4 py-3 flex-nowrap font-medium select-none rounded justify-center items-center w-full inline-flex border hover:bg-blue-500 hover:text-black',
+            TITLE_CLASSES: 'text-xl font-bold mb-4',
+            DESCRIPTION_CLASSES: 'text-md mb-4',
+            ERROR_CLASSES: 'justify-center items-center w-full py-8 font-semibold text-red-500 leading-5 tracking-tight inline-flex',
+        };
     },
     watch: {
         include_text(value) {

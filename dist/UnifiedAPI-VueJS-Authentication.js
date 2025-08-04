@@ -1,5 +1,5 @@
-import { createElementBlock as n, openBlock as r, createCommentVNode as l, toDisplayString as c, Fragment as d, renderList as _ } from "vue";
-const h = {
+import { createElementBlock as n, openBlock as r, createCommentVNode as u, normalizeClass as o, toDisplayString as a, Fragment as d, renderList as h } from "vue";
+const S = {
   name: "UnifiedAuthentication",
   props: {
     workspace_id: {
@@ -24,6 +24,16 @@ const h = {
     include_icon: Boolean,
     // defaults to true
     error: String
+  },
+  setup() {
+    return {
+      BUTTON_CONTAINER_CLASSES: "flex flex-col gap-2",
+      BUTTON_CLASSES_ICON: "w-5 h-5 mr-2",
+      BUTTON_CLASSES: "px-4 py-3 flex-nowrap font-medium select-none rounded justify-center items-center w-full inline-flex border hover:bg-blue-500 hover:text-black",
+      TITLE_CLASSES: "text-xl font-bold mb-4",
+      DESCRIPTION_CLASSES: "text-md mb-4",
+      ERROR_CLASSES: "justify-center items-center w-full py-8 font-semibold text-red-500 leading-5 tracking-tight inline-flex"
+    };
   },
   watch: {
     include_text(e) {
@@ -57,46 +67,46 @@ const h = {
   }
 }, f = (e, i) => {
   const t = e.__vccOpts || e;
-  for (const [a, s] of i)
-    t[a] = s;
+  for (const [s, c] of i)
+    t[s] = c;
   return t;
-}, p = { class: "w-full" }, m = {
-  key: 0,
-  class: "text-xl font-bold mb-4"
-}, g = {
-  key: 1,
-  class: "text-md mb-4"
-}, x = {
-  key: 2,
-  class: "justify-center items-center w-full py-8 font-semibold text-red-500 leading-5 tracking-tight inline-flex"
-}, v = {
-  key: 3,
-  class: "flex flex-col gap-2"
-}, y = ["href", "title"], k = ["src"], w = {
+}, p = { class: "w-full" }, m = ["href", "title"], g = ["src"], x = {
   key: 1,
   class: ""
 };
-function S(e, i, t, a, s, u) {
+function C(e, i, t, s, c, _) {
   return r(), n("div", p, [
-    t.title ? (r(), n("h3", m, c(t.title), 1)) : l("", !0),
-    t.description ? (r(), n("p", g, c(t.description), 1)) : l("", !0),
-    s._error ? (r(), n("div", x, c(s._error), 1)) : (r(), n("div", v, [
-      (r(!0), n(d, null, _(s.authintegrations, (o) => (r(), n("a", {
-        class: "px-4 py-3 flex-nowrap font-medium select-none rounded justify-center items-center w-full inline-flex border hover:bg-blue-500 hover:text-black",
-        href: u.href(o),
-        title: t.pretext ? `${t.pretext} ${o.name}` : o.name
+    t.title ? (r(), n("h3", {
+      key: 0,
+      class: o(s.TITLE_CLASSES)
+    }, a(t.title), 3)) : u("", !0),
+    t.description ? (r(), n("p", {
+      key: 1,
+      class: o(s.DESCRIPTION_CLASSES)
+    }, a(t.description), 3)) : u("", !0),
+    c._error ? (r(), n("div", {
+      key: 2,
+      class: o(s.ERROR_CLASSES)
+    }, a(c._error), 3)) : (r(), n("div", {
+      key: 3,
+      class: o(s.BUTTON_CONTAINER_CLASSES)
+    }, [
+      (r(!0), n(d, null, h(c.authintegrations, (l) => (r(), n("a", {
+        class: o(s.BUTTON_CLASSES),
+        href: _.href(l),
+        title: t.pretext ? `${t.pretext} ${l.name}` : l.name
       }, [
-        s._include_icon ? (r(), n("img", {
+        c._include_icon ? (r(), n("img", {
           key: 0,
-          src: o.logo_url,
-          class: "w-5 h-5 mr-2"
-        }, null, 8, k)) : l("", !0),
-        s._include_text ? (r(), n("div", w, c(t.pretext) + " " + c(o.name), 1)) : l("", !0)
-      ], 8, y))), 256))
-    ]))
+          src: l.logo_url,
+          class: o(s.BUTTON_CLASSES_ICON)
+        }, null, 10, g)) : u("", !0),
+        c._include_text ? (r(), n("div", x, a(t.pretext) + " " + a(l.name), 1)) : u("", !0)
+      ], 10, m))), 256))
+    ], 2))
   ]);
 }
-const B = /* @__PURE__ */ f(h, [["render", S]]);
+const T = /* @__PURE__ */ f(S, [["render", C]]);
 export {
-  B as default
+  T as default
 };
