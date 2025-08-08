@@ -1,5 +1,5 @@
-import { createElementBlock as n, openBlock as r, createCommentVNode as u, normalizeClass as o, toDisplayString as a, Fragment as d, renderList as h } from "vue";
-const S = {
+import { createElementBlock as n, openBlock as r, createCommentVNode as a, toDisplayString as c, Fragment as _, renderList as d } from "vue";
+const h = {
   name: "UnifiedAuthentication",
   props: {
     workspace_id: {
@@ -25,39 +25,29 @@ const S = {
     // defaults to true
     error: String
   },
-  setup() {
-    return {
-      BUTTON_CONTAINER_CLASSES: "flex flex-col gap-2",
-      BUTTON_CLASSES_ICON: "w-5 h-5 mr-2",
-      BUTTON_CLASSES: "px-4 py-3 flex-nowrap font-medium select-none rounded justify-center items-center w-full inline-flex border hover:bg-blue-500 hover:text-black",
-      TITLE_CLASSES: "text-xl font-bold mb-4",
-      DESCRIPTION_CLASSES: "text-md mb-4",
-      ERROR_CLASSES: "justify-center items-center w-full py-8 font-semibold text-red-500 leading-5 tracking-tight inline-flex"
-    };
-  },
   watch: {
-    include_text(e) {
-      this._include_text = e !== void 0 ? e : !0;
+    include_text(t) {
+      this._include_text = t !== void 0 ? t : !0;
     },
-    include_icon(e) {
-      this._include_icon = e !== void 0 ? e : !0;
+    include_icon(t) {
+      this._include_icon = t !== void 0 ? t : !0;
     }
   },
   data() {
-    var t;
-    const e = (this.dc || "us").toLowerCase();
+    var e;
+    const t = (this.dc || "us").toLowerCase();
     return {
-      api_url: location.href.includes("localhost:") ? "http://localhost:8000" : e === "au" ? "https://api-au.unified.to" : e === "eu" ? "https://api-eu.unified.to" : "https://api.unified.to",
+      api_url: location.href.includes("localhost:") ? "http://localhost:8000" : t === "au" ? "https://api-au.unified.to" : t === "eu" ? "https://api-eu.unified.to" : "https://api.unified.to",
       authintegrations: void 0,
       _include_text: this.include_text !== !1 ? this.include_text : !0,
       _include_icon: this.include_icon !== !1 ? this.include_icon : !0,
-      _error: (t = this.error) == null ? void 0 : t.replace("_", " ")
+      _error: (e = this.error) == null ? void 0 : e.replace("_", " ")
     };
   },
   methods: {
-    href(e) {
+    href(t) {
       const i = new URLSearchParams();
-      return i.append("redirect", "true"), this.success_url ? i.append("success_redirect", this.success_url) : i.append("success_redirect", location.href.split("?")[0]), this.failure_url ? i.append("failure_redirect", this.failure_url) : i.append("failure_redirect", location.href.split("?")[0]), this.state && i.append("state", this.state), this.environment && this.environment !== "Production" && i.append("env", this.environment), `${this.api_url}/unified/integration/login/${this.workspace_id}/${e.type}?${i.toString()}`;
+      return i.append("redirect", "true"), this.success_url ? i.append("success_redirect", this.success_url) : i.append("success_redirect", location.href.split("?")[0]), this.failure_url ? i.append("failure_redirect", this.failure_url) : i.append("failure_redirect", location.href.split("?")[0]), this.state && i.append("state", this.state), this.environment && this.environment !== "Production" && i.append("env", this.environment), `${this.api_url}/unified/integration/login/${this.workspace_id}/${t.type}?${i.toString()}`;
     }
   },
   async mounted() {
@@ -65,48 +55,48 @@ const S = {
       `${this.api_url}/unified/integration/workspace/${this.workspace_id}?categories=auth&active=true&summary=true&env=${this.environment || ""}`
     )).json() || [], console.log(this.authintegrations);
   }
-}, f = (e, i) => {
-  const t = e.__vccOpts || e;
-  for (const [s, c] of i)
-    t[s] = c;
-  return t;
-}, p = { class: "w-full" }, m = ["href", "title"], g = ["src"], x = {
+}, p = (t, i) => {
+  const e = t.__vccOpts || t;
+  for (const [u, s] of i)
+    e[u] = s;
+  return e;
+}, f = { class: "unified-auth-container" }, g = {
+  key: 0,
+  class: "auth-title"
+}, m = {
   key: 1,
-  class: ""
+  class: "auth-description"
+}, v = {
+  key: 2,
+  class: "auth-error"
+}, x = {
+  key: 3,
+  class: "button-container"
+}, k = ["href", "title"], S = ["src"], y = {
+  key: 1,
+  class: "button-text"
 };
-function C(e, i, t, s, c, _) {
-  return r(), n("div", p, [
-    t.title ? (r(), n("h3", {
-      key: 0,
-      class: o(s.TITLE_CLASSES)
-    }, a(t.title), 3)) : u("", !0),
-    t.description ? (r(), n("p", {
-      key: 1,
-      class: o(s.DESCRIPTION_CLASSES)
-    }, a(t.description), 3)) : u("", !0),
-    c._error ? (r(), n("div", {
-      key: 2,
-      class: o(s.ERROR_CLASSES)
-    }, a(c._error), 3)) : (r(), n("div", {
-      key: 3,
-      class: o(s.BUTTON_CONTAINER_CLASSES)
-    }, [
-      (r(!0), n(d, null, h(c.authintegrations, (l) => (r(), n("a", {
-        class: o(s.BUTTON_CLASSES),
-        href: _.href(l),
-        title: t.pretext ? `${t.pretext} ${l.name}` : l.name
+function w(t, i, e, u, s, l) {
+  return r(), n("div", f, [
+    e.title ? (r(), n("h3", g, c(e.title), 1)) : a("", !0),
+    e.description ? (r(), n("p", m, c(e.description), 1)) : a("", !0),
+    s._error ? (r(), n("div", v, c(s._error), 1)) : (r(), n("div", x, [
+      (r(!0), n(_, null, d(s.authintegrations, (o) => (r(), n("a", {
+        class: "auth-button",
+        href: l.href(o),
+        title: e.pretext ? `${e.pretext} ${o.name}` : o.name
       }, [
-        c._include_icon ? (r(), n("img", {
+        s._include_icon ? (r(), n("img", {
           key: 0,
-          src: l.logo_url,
-          class: o(s.BUTTON_CLASSES_ICON)
-        }, null, 10, g)) : u("", !0),
-        c._include_text ? (r(), n("div", x, a(t.pretext) + " " + a(l.name), 1)) : u("", !0)
-      ], 10, m))), 256))
-    ], 2))
+          src: o.logo_url,
+          class: "button-icon"
+        }, null, 8, S)) : a("", !0),
+        s._include_text ? (r(), n("div", y, c(e.pretext) + " " + c(o.name), 1)) : a("", !0)
+      ], 8, k))), 256))
+    ]))
   ]);
 }
-const T = /* @__PURE__ */ f(S, [["render", C]]);
+const B = /* @__PURE__ */ p(h, [["render", w]]);
 export {
-  T as default
+  B as default
 };

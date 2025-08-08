@@ -34,7 +34,8 @@ import UnifiedAuthentication from '@unified-api/vuejs-authentication';
 </template>
 
 <script lang="ts">
-import UnifiedAuthentication from '@unified-api/vuejs-cauthentication';
+import UnifiedAuthentication from '@unified-api/vuejs-authentication';
+import '../node_modules/@unified-api/vuejs-authentication/dist/styles.css';
 
 export default {
     components: {

@@ -1,17 +1,17 @@
 <template>
-    <div class="w-full">
-        <h3 v-if="title" :class="TITLE_CLASSES">{{ title }}</h3>
-        <p v-if="description" :class="DESCRIPTION_CLASSES">{{ description }}</p>
+    <div class="unified-auth-container">
+        <h3 v-if="title" class="auth-title">{{ title }}</h3>
+        <p v-if="description" class="auth-description">{{ description }}</p>
 
-        <div v-if="_error" :class="ERROR_CLASSES">
+        <div v-if="_error" class="auth-error">
             {{ _error }}
         </div>
 
-        <div v-else :class="BUTTON_CONTAINER_CLASSES">
-            <a :class="BUTTON_CLASSES" v-for="auth of authintegrations" :href="href(auth)" :title="pretext ? `${pretext} ${auth.name}` : auth.name">
-                <img v-if="_include_icon" :src="auth.logo_url" :class="BUTTON_CLASSES_ICON" />
+        <div v-else class="button-container">
+            <a class="auth-button" v-for="auth of authintegrations" :href="href(auth)" :title="pretext ? `${pretext} ${auth.name}` : auth.name">
+                <img v-if="_include_icon" :src="auth.logo_url" class="button-icon" />
 
-                <div v-if="_include_text" class="">
+                <div v-if="_include_text" class="button-text">
                     {{ pretext }}
                     {{ auth.name }}
                 </div>
@@ -41,17 +41,6 @@ export default {
         include_text: Boolean, // defaults to true
         include_icon: Boolean, // defaults to true
         error: String,
-    },
-    setup() {
-        return {
-            BUTTON_CONTAINER_CLASSES: 'flex flex-col gap-2',
-            BUTTON_CLASSES_ICON: 'w-5 h-5 mr-2',
-            BUTTON_CLASSES:
-                'px-4 py-3 flex-nowrap font-medium select-none rounded justify-center items-center w-full inline-flex border hover:bg-blue-500 hover:text-black',
-            TITLE_CLASSES: 'text-xl font-bold mb-4',
-            DESCRIPTION_CLASSES: 'text-md mb-4',
-            ERROR_CLASSES: 'justify-center items-center w-full py-8 font-semibold text-red-500 leading-5 tracking-tight inline-flex',
-        };
     },
     watch: {
         include_text(value) {
@@ -115,3 +104,68 @@ export default {
     },
 };
 </script>
+
+<style>
+.unified-auth-container {
+    width: 100%;
+}
+
+.unified-auth-container .auth-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.unified-auth-container .auth-description {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.unified-auth-container .auth-error {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 2rem 0;
+    font-weight: 600;
+    color: #ef4444;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    display: inline-flex;
+}
+
+.unified-auth-container .button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.unified-auth-container .auth-button {
+    padding: 0.75rem 1rem;
+    flex-wrap: nowrap;
+    font-weight: 500;
+    user-select: none;
+    border-radius: 0.375rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    display: inline-flex;
+    border: 1px solid #d1d5db;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.unified-auth-container .auth-button:hover {
+    background-color: #3b82f6;
+    color: #000000;
+}
+
+.unified-auth-container .button-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.5rem;
+}
+
+.unified-auth-container .button-text {
+    /* Additional styling for button text if needed */
+}
+</style>

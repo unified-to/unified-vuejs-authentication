@@ -20,14 +20,7 @@ pretext: StringConstructor;
 include_text: BooleanConstructor;
 include_icon: BooleanConstructor;
 error: StringConstructor;
-}>, {
-BUTTON_CONTAINER_CLASSES: string;
-BUTTON_CLASSES_ICON: string;
-BUTTON_CLASSES: string;
-TITLE_CLASSES: string;
-DESCRIPTION_CLASSES: string;
-ERROR_CLASSES: string;
-}, {
+}>, {}, {
 api_url: string;
 authintegrations: IIntegration[] | undefined;
 _include_text: true;
