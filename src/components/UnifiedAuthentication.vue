@@ -1,21 +1,30 @@
 <template>
-    <div class="unified-auth-container">
-        <h3 v-if="title" class="auth-title">{{ title }}</h3>
-        <p v-if="description" class="auth-description">{{ description }}</p>
+    <div class="unified-auth-container" :data-theme="theme === 'auto' ? undefined : theme">
+        <div class="auth-card">
+            <header v-if="title || description" class="auth-header">
+                <h3 v-if="title" class="auth-title">{{ title }}</h3>
+                <p v-if="description" class="auth-description">{{ description }}</p>
+            </header>
 
-        <div v-if="_error" class="auth-error">
-            {{ _error }}
-        </div>
+            <div v-if="_error" class="auth-error" role="alert">
+                {{ _error }}
+            </div>
 
-        <div v-else class="button-container">
-            <a class="auth-button" v-for="auth of authintegrations" :href="href(auth)" :title="pretext ? `${pretext} ${auth.name}` : auth.name">
-                <img v-if="_include_icon" :src="auth.logo_url" class="button-icon" />
+            <div v-else class="button-container">
+                <a
+                    class="auth-button"
+                    v-for="auth of authintegrations"
+                    :key="auth.type"
+                    :href="href(auth)"
+                    :title="pretext ? `${pretext} ${auth.name}` : auth.name"
+                >
+                    <img v-if="_include_icon" :src="auth.logo_url" :alt="''" class="button-icon" />
 
-                <div v-if="_include_text" class="button-text">
-                    {{ pretext }}
-                    {{ auth.name }}
-                </div>
-            </a>
+                    <span v-if="_include_text" class="button-text">
+                        <template v-if="pretext">{{ pretext }} </template>{{ auth.name }}
+                    </span>
+                </a>
+            </div>
         </div>
     </div>
 </template>
@@ -41,6 +50,12 @@ export default {
         include_text: Boolean, // defaults to true
         include_icon: Boolean, // defaults to true
         error: String,
+        // 'auto' follows prefers-color-scheme; 'light' | 'dark' force a theme
+        theme: {
+            type: String,
+            default: 'auto',
+            validator: (value: string) => ['auto', 'light', 'dark'].includes(value),
+        },
     },
     watch: {
         include_text(value) {
@@ -107,65 +122,181 @@ export default {
 
 <style>
 .unified-auth-container {
+    --ua-bg: #ffffff;
+    --ua-fg: #212126;
+    --ua-muted: #747686;
+    --ua-border: #e5e5e5;
+    --ua-border-hover: #d4d4d8;
+    --ua-hover: #f7f7f8;
+    --ua-active: #f0f0f2;
+    --ua-error: #ef4444;
+    --ua-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.06);
+    --ua-ring-offset: #ffffff;
+    --ua-ring: rgba(33, 33, 38, 0.35);
+    --ua-radius-card: 0.75rem;
+    --ua-radius-control: 0.5rem;
+    --ua-font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+        sans-serif;
+
+    box-sizing: border-box;
     width: 100%;
+    font-family: var(--ua-font);
+    color: var(--ua-fg);
+    color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: dark) {
+    .unified-auth-container:not([data-theme='light']) {
+        --ua-bg: #212126;
+        --ua-fg: #f8f8f8;
+        --ua-muted: #a1a1aa;
+        --ua-border: #3f3f46;
+        --ua-border-hover: #52525b;
+        --ua-hover: #2c2c32;
+        --ua-active: #35353c;
+        --ua-error: #f87171;
+        --ua-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.45);
+        --ua-ring-offset: #212126;
+        --ua-ring: rgba(248, 248, 248, 0.35);
+        color-scheme: dark;
+    }
+}
+
+.unified-auth-container[data-theme='dark'] {
+    --ua-bg: #212126;
+    --ua-fg: #f8f8f8;
+    --ua-muted: #a1a1aa;
+    --ua-border: #3f3f46;
+    --ua-border-hover: #52525b;
+    --ua-hover: #2c2c32;
+    --ua-active: #35353c;
+    --ua-error: #f87171;
+    --ua-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.45);
+    --ua-ring-offset: #212126;
+    --ua-ring: rgba(248, 248, 248, 0.35);
+    color-scheme: dark;
+}
+
+.unified-auth-container[data-theme='light'] {
+    color-scheme: light;
+}
+
+.unified-auth-container *,
+.unified-auth-container *::before,
+.unified-auth-container *::after {
+    box-sizing: border-box;
+}
+
+.unified-auth-container .auth-card {
+    width: 100%;
+    max-width: 25rem;
+    margin: 0 auto;
+    padding: 2rem;
+    background: var(--ua-bg);
+    border: 1px solid var(--ua-border);
+    border-radius: var(--ua-radius-card);
+    box-shadow: var(--ua-shadow);
+}
+
+.unified-auth-container .auth-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
 }
 
 .unified-auth-container .auth-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--ua-fg);
 }
 
 .unified-auth-container .auth-description {
-    font-size: 1rem;
-    margin-bottom: 1rem;
+    margin: 0.5rem 0 0;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--ua-muted);
 }
 
 .unified-auth-container .auth-error {
+    display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 2rem 0;
-    font-weight: 600;
-    color: #ef4444;
-    line-height: 1.25;
-    letter-spacing: -0.025em;
-    display: inline-flex;
+    padding: 1.25rem 0.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--ua-error);
 }
 
 .unified-auth-container .button-container {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
 .unified-auth-container .auth-button {
-    padding: 0.75rem 1rem;
-    flex-wrap: nowrap;
-    font-weight: 500;
-    user-select: none;
-    border-radius: 0.375rem;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
+    gap: 0.75rem;
     width: 100%;
-    display: inline-flex;
-    border: 1px solid #d1d5db;
+    min-height: 2.5rem;
+    padding: 0.625rem 1rem;
+    background: var(--ua-bg);
+    border: 1px solid var(--ua-border);
+    border-radius: var(--ua-radius-control);
+    color: var(--ua-fg);
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25;
     text-decoration: none;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+    user-select: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .unified-auth-container .auth-button:hover {
-    background-color: #3b82f6;
-    color: #000000;
+    background: var(--ua-hover);
+    border-color: var(--ua-border-hover);
+    color: var(--ua-fg);
+}
+
+.unified-auth-container .auth-button:active {
+    background: var(--ua-active);
+}
+
+.unified-auth-container .auth-button:focus {
+    outline: none;
+}
+
+.unified-auth-container .auth-button:focus-visible {
+    border-color: var(--ua-fg);
+    box-shadow: 0 0 0 2px var(--ua-ring-offset), 0 0 0 4px var(--ua-ring);
 }
 
 .unified-auth-container .button-icon {
     width: 1.25rem;
     height: 1.25rem;
-    margin-right: 0.5rem;
+    flex-shrink: 0;
+    object-fit: contain;
 }
 
 .unified-auth-container .button-text {
-    /* Additional styling for button text if needed */
+    display: inline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .unified-auth-container .auth-button {
+        transition: none;
+    }
 }
 </style>

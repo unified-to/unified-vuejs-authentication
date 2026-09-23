@@ -20,6 +20,11 @@ pretext: StringConstructor;
 include_text: BooleanConstructor;
 include_icon: BooleanConstructor;
 error: StringConstructor;
+theme: {
+type: StringConstructor;
+default: string;
+validator: (value: string) => boolean;
+};
 }>, {}, {
 api_url: string;
 authintegrations: IIntegration[] | undefined;
@@ -44,9 +49,15 @@ pretext: StringConstructor;
 include_text: BooleanConstructor;
 include_icon: BooleanConstructor;
 error: StringConstructor;
+theme: {
+type: StringConstructor;
+default: string;
+validator: (value: string) => boolean;
+};
 }>> & Readonly<{}>, {
 include_text: boolean;
 include_icon: boolean;
+theme: string;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 export default _default;
 
