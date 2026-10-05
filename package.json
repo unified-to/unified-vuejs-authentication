@@ -1,6 +1,6 @@
 {
     "name": "@unified-api/vuejs-authentication",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "Unified.to VueJS authentication component",
     "keywords": [
         "unifiedapi",
